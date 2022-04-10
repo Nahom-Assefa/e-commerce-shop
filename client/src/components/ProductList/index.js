@@ -29,7 +29,6 @@ function ProductList() {
     }
   }, [data, dispatch])
 
-
   function filterProducts() {
     if (!currentCategory) {
       return state.products;
@@ -63,5 +62,6 @@ function ProductList() {
     </div>
   );
 }
+
 
 export default ProductList;
