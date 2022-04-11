@@ -36,12 +36,12 @@ export const reducer = (state, action) => {
         currentCategory: action.currentCategory,
       };
 
-    // case ADD_TO_CART:
-    //   return {
-    //     ...state,
-    //     cartOpen: true,
-    //     product: [...state.cart, action.product],
-    //   };
+    case ADD_TO_CART:
+      return {
+        ...state,
+        cartOpen: true,
+        cart: [...state.cart, action.product],
+      };
 
     case ADD_MULTIPLE_TO_CART:
       return {
@@ -51,7 +51,7 @@ export const reducer = (state, action) => {
 
     case REMOVE_FROM_CART:
       let newState = state.cart.filter((product) => {
-        return product._id != action._id;
+        return product._id !== action._id;
       });
 
       return {

@@ -64,15 +64,15 @@ test("UPDATE_CURRENT_CATEGORY", () => {
   expect(initialState.currentCategory).toBe("1");
 });
 
-// test("ADD_TO_CART", () => {
-//   let newState = reducer(initialState, {
-//     type: ADD_TO_CART,
-//     product: [{}, {}, {}, {}, {}],
-//   });
-
-//   expect(newState.cart.length).toBe(2);
-//   expect(initialState.cart.length).toBe(2);
-// });
+test('ADD_TO_CART', () => {
+    let newState = reducer(initialState, {
+      type: ADD_TO_CART,
+      product: { purchaseQuantity: 1 }
+    });
+  
+    expect(newState.cart.length).toBe(3);
+    expect(initialState.cart.length).toBe(2);
+  });
 
 test("ADD_MULTIPLE_TO_CART", () => {
   let newState = reducer(initialState, {

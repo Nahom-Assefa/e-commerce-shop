@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Cart from "../components/Cart";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 
@@ -57,6 +58,7 @@ function Detail() {
         </div>
       ) : null}
       {loading ? <img src={spinner} alt="loading" /> : null}
+      <Cart/>
     </>
   );
 }
