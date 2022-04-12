@@ -12,6 +12,8 @@ const Cart = () => {
   dispatch({ type: TOGGLE_CART });
   }
 
+  console.log('line 14', state);
+
   if (!state.cartOpen) {
     return (
       <div className="cart-closed" onClick={toggleCart}>
