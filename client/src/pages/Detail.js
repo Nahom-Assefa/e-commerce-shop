@@ -23,7 +23,9 @@ function Detail() {
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
-  const { products } = state;
+  const { products, cart } = state;
+
+  console.log("currentProduct", currentProduct);
 
   useEffect(() => {
     if (products.length) {
@@ -37,11 +39,28 @@ function Detail() {
   }, [products, data, dispatch, id]);
 
   function addToCart() {
+    const itemCart = cart.find((cartItem) => cartItem.id === id);
+
+    if (itemCart) {
+      dispatch({
+        type: UPDATE_CART_QUANTITY,
+        _id: id,
+        purchaseQuantity: parseInt(itemCart.purchaseQuantity) + 1,
+      });
+    } else {
+      dispatch({
+        type: ADD_TO_CART,
+        product: [...currentProduct, { purchaseQuantity: 1 }],
+      });
+    }
+  }
+
+  function remove() {
     dispatch({
-      type: ADD_TO_CART,
-      product: [...currentProduct, { purchaseQuantity: 1 }]
+      type: REMOVE_FROM_CART,
+      _id: currentProduct._id,
     });
-  };
+  }
 
   return (
     <>
@@ -56,7 +75,13 @@ function Detail() {
           <p>
             <strong>Price:</strong>${currentProduct.price}{" "}
             <button onClick={addToCart}>Add to Cart</button>
-            <button>Remove from Cart</button>
+            {/* <button onClick={remove}>Remove from Cart</button> */}
+            <button
+              disabled={!cart.find((p) => p._id === currentProduct._id)}
+              onClick={remove}
+            >
+              Remove from Cart
+            </button>
           </p>
 
           <img
