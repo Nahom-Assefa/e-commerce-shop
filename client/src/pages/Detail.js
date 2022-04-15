@@ -32,32 +32,32 @@ function Detail() {
   useEffect(() => {
     // already in global store
     if (products.length) {
-      setCurrentProduct(products.find(product => product._id === id));
-    } 
+      setCurrentProduct(products.find((product) => product._id === id));
+    }
     // retrieved from server
     else if (data) {
       dispatch({
         type: UPDATE_PRODUCTS,
-        products: data.products
+        products: data.products,
       });
-  
+
       data.products.forEach((product) => {
-        idbPromise('products', 'put', product);
+        idbPromise("products", "put", product);
       });
     }
     // get cache from idb
     else if (!loading) {
-      idbPromise('products', 'get').then((indexedProducts) => {
+      idbPromise("products", "get").then((indexedProducts) => {
         dispatch({
           type: UPDATE_PRODUCTS,
-          products: indexedProducts
+          products: indexedProducts,
         });
       });
     }
   }, [products, data, loading, dispatch, id]);
 
   function addToCart() {
-    const itemCart = cart.find((cartItem) => cartItem.id === id);
+    const itemCart = cart.find((cartItem) => cartItem._id === id);
 
     if (itemCart) {
       dispatch({
@@ -65,19 +65,29 @@ function Detail() {
         _id: id,
         purchaseQuantity: parseInt(itemCart.purchaseQuantity) + 1,
       });
+      // if we're updating quantity, use existing item data and increment purchaseQuantity value by one
+      idbPromise("cart", "put", {
+        ...itemCart,
+        purchaseQuantity: parseInt(itemCart.purchaseQuantity) + 1,
+      });
     } else {
       dispatch({
         type: ADD_TO_CART,
-        product: [...currentProduct, { purchaseQuantity: 1 }],
+        product: {...currentProduct, purchaseQuantity: 1 },
       });
+       // if product isn't in the cart yet, add it to the current shopping cart in IndexedDB
+       idbPromise('cart', "put", { ...currentProduct, purchaseQuantity: 1 })
     }
   }
 
   function remove() {
+    console.log('line 84', currentProduct);
     dispatch({
       type: REMOVE_FROM_CART,
       _id: currentProduct._id,
     });
+
+    idbPromise("cart", "delete", { ...currentProduct })
   }
 
   return (
